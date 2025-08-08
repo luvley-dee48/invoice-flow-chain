@@ -14,9 +14,11 @@ import {
 interface SidebarProps {
   activeSection: string;
   onSectionChange: (section: string) => void;
+  userRole?: string;
+  onRoleChange?: () => void;
 }
 
-export const DashboardSidebar = ({ activeSection, onSectionChange }: SidebarProps) => {
+export const DashboardSidebar = ({ activeSection, onSectionChange, userRole, onRoleChange }: SidebarProps) => {
   const menuItems = [
     { id: 'overview', label: 'Overview', icon: LayoutDashboard },
     { id: 'invoices', label: 'My Invoices', icon: FileText },
@@ -66,6 +68,19 @@ export const DashboardSidebar = ({ activeSection, onSectionChange }: SidebarProp
           })}
         </nav>
       </div>
+      
+      {onRoleChange && (
+        <div className="p-4 mt-auto border-t border-border">
+          <Button 
+            variant="outline" 
+            className="w-full justify-start gap-2"
+            onClick={onRoleChange}
+          >
+            <Settings className="h-4 w-4" />
+            Switch Role
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 // Landing page imports
 import NavBar from '@/components/NavBar';
@@ -27,6 +28,7 @@ const Index = () => {
   const [userRole, setUserRole] = useState<string | null>(null);
   const [activeSection, setActiveSection] = useState("overview");
   const [isLoggedIn, setIsLoggedIn] = useState(false); // You can replace with real auth
+  const navigate = useNavigate();
 
   // ----- SME Dashboard Renderer -----
   const renderSMEContent = () => {
@@ -65,7 +67,7 @@ const Index = () => {
         <TestimonialsSection />
         <CTASection />
         <div className="flex justify-center mt-8">
-          <Button onClick={() => setIsLoggedIn(true)}>Go to Dashboard</Button>
+          <Button onClick={() => navigate('/dashboard')}>Go to Dashboard</Button>
         </div>
       </div>
     );

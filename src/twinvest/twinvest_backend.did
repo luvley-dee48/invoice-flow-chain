@@ -1,0 +1,98 @@
+type Role = variant { investor; issuer; admin };
+type KycStatus = variant { unverified; pending; verified; rejected };
+type NotificationCategory = variant { info; action; alert };
+type TransactionType = variant { deposit; invest; payout; withdrawal };
+
+type Transaction = record {
+  id: nat;
+  user: principal;
+  timestamp: int;
+  kind: TransactionType;
+  amount: nat;
+  invoiceId: opt nat;
+  description: text;
+};
+
+type Portfolio = record {
+  owner: principal;
+  cashBalance: nat;
+  totalInvested: nat;
+  positions: vec record { nat; nat };
+};
+
+type InvoiceStatus = variant { open; funded; repaid; defaulted };
+
+type Invoice = record {
+  id: nat;
+  issuer: principal;
+  amount: nat;
+  discountBps: nat;
+  dueDate: int;
+  fundedAmount: nat;
+  status: InvoiceStatus;
+  investors: vec record { principal; nat };
+  createdAt: int;
+};
+
+type Metrics = record {
+  processedVolume: nat;
+  activeUsers: nat;
+  openInvoices: nat;
+  investorsCount: nat;
+};
+
+type Notification = record {
+  id: nat;
+  user: principal;
+  message: text;
+  createdAt: int;
+  category: NotificationCategory;
+  read: bool;
+};
+
+service : {
+  // Identity + Roles
+  set_my_role: (Role) -> ()
+    ;
+  get_my_role: () -> (opt Role) query
+    ;
+
+  // KYC
+  submit_my_kyc: () -> ()
+    ;
+  get_my_kyc: () -> (KycStatus) query
+    ;
+  admin_set_kyc: (principal, KycStatus) -> (bool)
+    ;
+
+  // Portfolio + Transactions
+  get_my_portfolio: () -> (Portfolio) query
+    ;
+  list_my_transactions: () -> (vec Transaction) query
+    ;
+  deposit: (nat) -> (bool)
+    ;
+
+  // Marketplace
+  create_invoice: (nat, nat, int) -> (nat)
+    ;
+  list_invoices: () -> (vec Invoice) query
+    ;
+  get_invoice: (nat) -> (opt Invoice) query
+    ;
+  invest_in_invoice: (nat, nat) -> (bool)
+    ;
+
+  // Notifications
+  push_notification: (principal, text, NotificationCategory) -> (opt nat)
+    ;
+  list_my_notifications: () -> (vec Notification) query
+    ;
+  mark_notification_read: (nat) -> (bool)
+    ;
+
+  // Analytics
+  get_dashboard_metrics: () -> (Metrics) query
+    ;
+}
+

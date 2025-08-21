@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "canisters": {
+    "twinvest_backend": {
+      "type": "motoko",
+      "main": "src/twinvest/main.mo",
+      "candid": "src/twinvest/twinvest_backend.did",
+      "build": "",
+      "wasm": "",
+      "declarations": {
+        "output": "src/declarations/twinvest_backend",
+        "node_compatibility": true
+      }
+    }
+  },
+  "defaults": {
+    "build": {
+      "args": "",
+      "packtool": ""
+    }
+  },
+  "networks": {
+    "local": {
+      "bind": "127.0.0.1:4943",
+      "type": "ephemeral"
+    }
+  }
+}
+
